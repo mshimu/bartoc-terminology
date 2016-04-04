@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+	
+	
+<h:head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Terminologies</title>
+</h:head>
+<h:body>
+		
+<h:form id="classificationForm">
+	<p:panel header="Select a Term Name" style="margin-bottom:10px;">
+        <h:panelGrid columns="2" cellpadding="5">
+			<p:outputLabel for="listName" value="Term Name: " />
+			<p:selectOneMenu id="listName" value="#{showTerminology.listName}" style="width:125px">
+				<f:selectItem itemLabel="Select One" itemValue="" />
+				<f:selectItem itemLabel="Subject Classifications" itemValue="Subject Classifications" />
+				<f:selectItem itemLabel="Subject Heading" itemValue="Subject Heading" />
+				<f:selectItem itemLabel="Thesauri" itemValue="Thesauri" />
+				<f:selectItem itemLabel="Universal Classifications" itemValue="Universal Classifications" />
+				<f:selectItem itemLabel="University Specific Classifications" itemValue="University Specific Classifications" />
+				
+				<p:ajax event="change" update=":classificationData:datatable" />
+			</p:selectOneMenu>
+		</h:panelGrid>
+	
+		<p:separator />
+ 
+		<p:commandButton value="Submit" action="view?faces-redirect=true" icon="ui-icon-check" />
+	</p:panel>
+
+</h:form>
+
+<h:form id="classificationData">
+   	      
+    			<p:dataTable id="datatable" var="bartoc" value="#{showTerminology.getTerminology()}" >
+        			
+        			<f:facet name="header">
+            			Expand the name to see detailed information
+        			</f:facet>
+        		<p:column style="width:16px">
+            		<p:rowToggler />
+        		</p:column>
+        		<p:column headerText="Title: ">
+            		<h:outputText value="#{bartoc.prefLabel}" />
+        		</p:column>
+ 
+       	 			<p:rowExpansion>
+            			<p:panelGrid  columns="1" columnClasses="label,value" style="width:100%">
+ 						
+ <!--  						<p:column>-->
+                			<h:outputText value="Title: #{bartoc.prefLabel}" />
+ <!--						</p:column>-->
+ 						
+ <!--						<p:column>-->
+                			<h:outputText value="Alternative Title: " />
+                			<h:outputText value="#{bartoc.altLabel}" />
+ <!--						</p:column>-->
+ 
+ <!--						<p:column>-->
+                			<h:outputText value="Abstract: " />
+                			<h:outputText value="#{bartoc.scopeNote}" />
+ <!--						</p:column>-->
+ 
+ <!--						<p:column>-->
+                			<h:outputText value="Author: " />
+                			<h:outputText value="#{bartoc.creator}" />
+ <!--						</p:column>     -->
+ 
+ <!--						<p:column>          -->
+                			<h:outputText value="Type: " />
+                			<h:outputText value="#{bartoc.type}" />
+ <!--						</p:column>      -->
+ 
+ <!--						<p:column>         -->
+                			<h:outputText value="Wikidata: " />
+                			<h:outputText value="#{bartoc.wikipedia}" />
+ <!--						</p:column>   -->
+ 						
+ <!--						<p:column>         -->   
+                			<h:outputText value="Link: " />
+                			<h:outputText value="#{bartoc.url}" />
+ <!--						</p:column> -->
+ 
+ <!--						<p:column>       -->       
+                			<h:outputText value="Topic: " />
+                			<h:outputText value="#{bartoc.subject}" />
+<!--   						</p:column>  -->
+   
+ <!--  						<p:column>       -->      
+                			<h:outputText value="DDC: " />
+                			<h:outputText value="#{bartoc.ddc_notation}" />
+ <!--  						</p:column>       -->      
+            			
+            			</p:panelGrid>
+        			</p:rowExpansion>
+    			</p:dataTable>
+</h:form>
+
+</h:body>
+
+</html>
