@@ -3,9 +3,6 @@ package bartoc.terminology.de;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.ManagedBean;
-
-
 public class BartocTerminology {
 	
 //	private String classification;
