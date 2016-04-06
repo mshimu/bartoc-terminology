@@ -119,47 +119,43 @@ public class ShowBartocTerminology {
 		
 	}
 
-	public List<BartocTerminology> getTerminology(){
-		try {
-			mongo = new Mongo("localhost",27017);
-			db = mongo.getDB("MongoDatabase");
-			table = db.getCollection("data_bartoc");
-			list = new ArrayList<BartocTerminology>();
-			BartocTerminology bT = null;
-			setQuery(new BasicDBObject("Classification", getListName()));
-			setFields(new BasicDBObject("_id",0).append("Classification", 0));
-	
-			DBCursor cursor = table.find(getQuery(), getFields());
-				while (cursor.hasNext()) {
-					DBObject obj = cursor.next();
-					String ddcnotation = null;
-					ArrayList<DBObject> description = (ArrayList<DBObject>)obj.get("Description"); 
-						if(description!=null){
-							for(DBObject embedded : description){
-								bT = new BartocTerminology();
-								bT.setPrefLabel((String)embedded.get("prefLabel"));
-								bT.setAltLabel((String)embedded.get("altLabel"));
-								bT.setScopeNote((String)embedded.get("scopeNote"));
-								bT.setCreator((String)embedded.get("creator"));
-								bT.setType((String)embedded.get("type"));
-								bT.setWikipedia((String)embedded.get("wikipedia"));
-								bT.setUrl((String)embedded.get("url"));
-								bT.setSubject((String)embedded.get("subject"));
-								BasicDBList Ddc = (BasicDBList) embedded.get("ddc_notation");
-									for(Object dbObj : Ddc) {
-				    			
-										// shows each item from the ddc_notation array
-										ddcnotation = dbObj.toString();
-									}
-								bT.setClasses((String)embedded.get("classes"));
-								list.add(bT);
-								
-							}
-						}
-					}		
-		}catch (IOException e) {
-			 e.printStackTrace();	
-		}
+	public List<BartocTerminology> getTerminology() {
+        mongo = new Mongo("localhost",27017);
+        db = mongo.getDB("MongoDatabase");
+        table = db.getCollection("data_bartoc");
+        list = new ArrayList<BartocTerminology>();
+        BartocTerminology bT = null;
+        setQuery(new BasicDBObject("Classification", getListName()));
+        setFields(new BasicDBObject("_id",0).append("Classification", 0));
+
+        DBCursor cursor = table.find(getQuery(), getFields());
+        while (cursor.hasNext()) {
+            DBObject obj = cursor.next();
+            String ddcnotation = null;
+            ArrayList<DBObject> description = (ArrayList<DBObject>)obj.get("Description"); 
+                if(description!=null){
+                    for(DBObject embedded : description){
+                        bT = new BartocTerminology();
+                        bT.setPrefLabel((String)embedded.get("prefLabel"));
+                        bT.setAltLabel((String)embedded.get("altLabel"));
+                        bT.setScopeNote((String)embedded.get("scopeNote"));
+                        bT.setCreator((String)embedded.get("creator"));
+                        bT.setType((String)embedded.get("type"));
+                        bT.setWikipedia((String)embedded.get("wikipedia"));
+                        bT.setUrl((String)embedded.get("url"));
+                        bT.setSubject((String)embedded.get("subject"));
+                        BasicDBList Ddc = (BasicDBList) embedded.get("ddc_notation");
+                            for(Object dbObj : Ddc) {
+                        
+                                // shows each item from the ddc_notation array
+                                ddcnotation = dbObj.toString();
+                            }
+                        bT.setClasses((String)embedded.get("classes"));
+                        list.add(bT);
+                        
+                    }
+                }
+            }		
 		return list;
 		
 	}

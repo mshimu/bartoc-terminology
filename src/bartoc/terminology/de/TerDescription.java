@@ -3,6 +3,7 @@ package bartoc.terminology.de;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +41,14 @@ public class TerDescription {
 		return table;
 	}
 	
-	private  void InsertDB() throws UnknownHostException{
+	private  void InsertDB() throws UnknownHostException, IOException, FileNotFoundException {
 		//DBCollection table = MongodbConnection.getConnection("testdatabase", "mappings1");
 		mongo = new Mongo("localhost",27017);
 		db = mongo.getDB("MongoDatabase");
 		table = db.getCollection("data_bartoc");
 		
 		String strLine = "";
-		try {
+
 			BufferedReader br = new BufferedReader(new FileReader("D:/Software/Project_ColiConc/Data/file.Json"));
 				while ((strLine = br.readLine()) != null) {
 				System.out.println(strLine);
@@ -69,13 +70,9 @@ public class TerDescription {
 //	                    System.out.println(cursorDoc.next());
 //	                }
 			 }
-		} catch (IOException e) {
-			 e.printStackTrace();	
-		}
 	}
 	
-	public List<BartocTerminology> getTerminology(DBObject dso, BasicDBObject bso){
-		try {
+	public List<BartocTerminology> getTerminology(DBObject dso, BasicDBObject bso) throws IOException {
 			mongo = new Mongo("localhost",27017);
 			db = mongo.getDB("MongoDatabase");
 			table = db.getCollection("data_bartoc");
@@ -108,10 +105,6 @@ public class TerDescription {
 							
 						}	
 				}		
-		}
-		catch (IOException e) {
-			 e.printStackTrace();	
-		}
 		System.out.println("the is :" + list);
 		return list;
 	}

@@ -37,7 +37,6 @@ public class Test_Data {
 	}
 	
 	public void getThesauriList() throws UnknownHostException{
-		try{
 			mongo = new Mongo("localhost", 27017);
 			db = mongo.getDB("MongoDatabase");
 			table = db.getCollection("data_bartoc");
@@ -102,10 +101,6 @@ public class Test_Data {
 			}
 			lst = list;
 			System.out.println(lst);
-		}
-		catch (IOException e) {
-			e.printStackTrace();	
-		}
 	}
 	
 	public void getList() throws Exception{
