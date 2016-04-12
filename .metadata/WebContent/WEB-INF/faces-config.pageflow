@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14594100065230" configfile="/bartoc-terminology/WebContent/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="index.xhtml" x="372" y="228" id="pf14594343554491" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf14595123299503" path="/index.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="view.xhtml" x="576" y="228" id="pf14595123299504" inlinks="pf14595123299503" path="/view.xhtml"/>
-  <links id="pf14595123299503" target="pf14595123299504" source="pf14594343554491"/>
+  <nodes xsi:type="pageflow:PFPage" name="index.xhtml" x="372" y="228" id="pf14594343554491" referenceLink="//@navigationRule.0/@fromViewId|" path="/index.xhtml"/>
 </pageflow:Pageflow>

@@ -2,8 +2,8 @@ package bartoc.terminology.de;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.ManagedBean;
+import com.mongodb.BasicDBList;
 
 
 public class BartocTerminology {
@@ -18,10 +18,17 @@ public class BartocTerminology {
 	private String url;
 	private String subject;
 	private String classes;
-//	private String ddc_notation;
-	private String[] ddc_notation;
+	private String ddc_notation;
+//	private String[] ddc_notation;
+	private BasicDBList[] ddc;
 		
-//	public String getClassification() { return classification; }
+public BasicDBList[] getDdc() {
+		return ddc;
+	}
+	public void setDdc(BasicDBList[] ddc) {
+		this.ddc = ddc;
+	}
+	//	public String getClassification() { return classification; }
 	public String getPrefLabel() { return prefLabel; }
 	public String getAltLabel() { return altLabel; }
 	public String getScopeNote() { return scopeNote; }
@@ -31,7 +38,7 @@ public class BartocTerminology {
 	public String getUrl() { return url; }
 	public String getSubject() { return subject; }
 	public String getClasses() { return classes; }
-	public String[] getDdc_notation() { return ddc_notation; }
+	public String getDdc_notation() { return ddc_notation; }
 	
 //	public void setClassification(String classification){
 //		this.classification = classification;
@@ -63,8 +70,12 @@ public class BartocTerminology {
 	public void setClasses(String classes){
 		this.classes = classes;
 	}
-	public void setDdc_notation(String[] ddc_notation){
+	public void setDdc_notation(String ddc_notation){
 		this.ddc_notation = ddc_notation;
+	}
+	public Object add(String ddcnotation) {
+		// TODO Auto-generated method stub
+		return ddcnotation;
 	}
 
 }

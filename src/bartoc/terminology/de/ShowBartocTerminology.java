@@ -2,32 +2,23 @@ package bartoc.terminology.de;
 
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.SessionScoped;
 
 import bartoc.terminology.de.BartocTerminology;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;  
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonValue;
-import javax.naming.Context;  
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;  
-
-import org.primefaces.component.row.Row;
+import javax.json.JsonWriter;  
+import org.primefaces.json.JSONException;
+import org.primefaces.model.StreamedContent;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -36,9 +27,11 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.QueryBuilder;
+import com.mongodb.ServerAddress;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -53,11 +46,11 @@ public class ShowBartocTerminology {
 	DB db = null;
 	Mongo mongo = null;
 	DBCursor cursor = null;
-	private List<BartocTerminology> list = new ArrayList<BartocTerminology>();
 	private DBObject query=null;
 	private BasicDBObject fields=null;
-	private String queryName;
-	private String fieldName;
+	private List<BartocTerminology> list = new ArrayList<BartocTerminology>();
+	private List<BartocTerminology> lst;
+	private List<BartocTerminology> filteredTerminologies = null;
 	private String listName;
 
 	public String getListName() {
@@ -86,7 +79,6 @@ public class ShowBartocTerminology {
 	
 	@PostConstruct
 	public void resetData() {
-//		System.out.println(getListName());
 		try{
 			if(getListName()=="Subject Classifications")
 			{
@@ -119,10 +111,12 @@ public class ShowBartocTerminology {
 		
 	}
 
-	public List<BartocTerminology> getTerminology(){
-		try {
-			mongo = new Mongo("localhost",27017);
-			db = mongo.getDB("MongoDatabase");
+	public List<BartocTerminology> getTerminology() throws IOException{
+//			mongo = new Mongo("localhost",27017);
+//			db = mongo.getDB("MongoDatabase");
+			mongo = new MongoClient(new ServerAddress("esx-128.gbv.de", 27017));
+               //     new MongoClientOptions.Builder().connectTimeout(300000).socketTimeout(300000).build());
+			db = mongo.getDB("BartocDatabase");
 			table = db.getCollection("data_bartoc");
 			list = new ArrayList<BartocTerminology>();
 			BartocTerminology bT = null;
@@ -132,7 +126,7 @@ public class ShowBartocTerminology {
 			DBCursor cursor = table.find(getQuery(), getFields());
 				while (cursor.hasNext()) {
 					DBObject obj = cursor.next();
-					String ddcnotation = null;
+//					String ddcnotation = null;
 					ArrayList<DBObject> description = (ArrayList<DBObject>)obj.get("Description"); 
 						if(description!=null){
 							for(DBObject embedded : description){
@@ -145,23 +139,29 @@ public class ShowBartocTerminology {
 								bT.setWikipedia((String)embedded.get("wikipedia"));
 								bT.setUrl((String)embedded.get("url"));
 								bT.setSubject((String)embedded.get("subject"));
-								BasicDBList Ddc = (BasicDBList) embedded.get("ddc_notation");
-									for(Object dbObj : Ddc) {
-				    			
-										// shows each item from the ddc_notation array
-										ddcnotation = dbObj.toString();
-									}
+								bT.setDdc_notation((String) embedded.get("ddc_notation"));
+//								BasicDBList Ddc = (BasicDBList) embedded.get("ddc_notation");
+//									for(Object dbObj : Ddc) {
+//				    			
+//										// shows each item from the ddc_notation array
+//										ddcnotation = dbObj.toString();
+//									}	
 								bT.setClasses((String)embedded.get("classes"));
 								list.add(bT);
-								
 							}
 						}
-					}		
-		}catch (IOException e) {
-			 e.printStackTrace();	
-		}
+					}
 		return list;
 		
+	}
+	
+	public List<BartocTerminology> getFilteredTerminologies() {
+		return filteredTerminologies;
+	}
+
+	public void setFilteredTerminologies(
+			List<BartocTerminology> filteredTerminologies) {
+		this.filteredTerminologies = filteredTerminologies;
 	}
 	
 	public void postProcessXLS(Object document) {
@@ -178,13 +178,55 @@ public class ShowBartocTerminology {
         }
     }
 	
+	public void fileDownload() throws IOException, JSONException{
+		String fileName = "dataTable";
+		FacesContext fc = FacesContext.getCurrentInstance();
+	    ExternalContext ec = fc.getExternalContext();
+	    ec.responseReset(); 
+	    ec.setResponseContentType("application/json"); 
+	    ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\""); 
+	    OutputStream wr = ec.getResponseOutputStream();
+//	    InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("D:/Software/Workplace/bartoc-terminology/WebContent/resources/dataTable.JSON");
+	    fc.responseComplete();
+		JsonWriter writer = null;
+		lst = getTerminology();
+		for(BartocTerminology dataTable:lst){
+			JsonObject btocObject = (JsonObject) Json.createObjectBuilder()
+				.add("Subject", Json.createArrayBuilder()
+					.add(Json.createObjectBuilder().add("prefLabel", dataTable.getPrefLabel())
+					.build())
+		            .add(Json.createObjectBuilder().add("notation",Json.createArrayBuilder()
+		            	.add(dataTable.getDdc_notation().toString())
+		            	.build())
+		            .build())	
+    				.add(Json.createObjectBuilder().add("inScheme", Json.createArrayBuilder()
+    					 .add(Json.createObjectBuilder().add("altLabel", dataTable.getAltLabel())
+		                 .add("url", dataTable.getUrl()).add("identifier", dataTable.getWikipedia())
+    					 	.build())
+    					 .build())
+    				.build())	 
+		            .add(Json.createObjectBuilder().add("scopeNote", dataTable.getScopeNote()))
+		            .add(Json.createObjectBuilder().add("type", dataTable.getType()))
+		            .add(Json.createObjectBuilder().add("creator", dataTable.getCreator()))
+		            .add(Json.createObjectBuilder().add("subject", dataTable.getSubject()))
+		            .add(Json.createObjectBuilder().add("classes", dataTable.getClasses()))
+		        .build())
+		    .build();
+			writer = Json.createWriter(wr);
+		    writer.writeObject(btocObject); 
+		}
+		writer.close();
+	    wr.close();
+	}
+	
 	public void searchTerm(){
 		
 	}
 
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		ShowBartocTerminology col = new ShowBartocTerminology();
-		col.getTerminology();
-	}
+//	public static void main(String[] args) throws IOException, JSONException {
+//		// TODO Auto-generated method stub
+//		ShowBartocTerminology col = new ShowBartocTerminology();
+//		col.getTerminology();
+//		col.fileDownload();
+//	}
 }
