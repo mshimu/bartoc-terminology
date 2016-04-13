@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Wed Apr 13 11:57:21 CEST 2016
+onejar.license.required=true
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=bartoc-terminology_fat.jar
+manifest.mergeall=true
+manifest.mainclass=
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=
+includes=

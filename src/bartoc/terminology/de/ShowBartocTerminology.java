@@ -1,6 +1,5 @@
 package bartoc.terminology.de;
 
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -217,6 +216,10 @@ public class ShowBartocTerminology {
 		}
 		writer.close();
 	    wr.close();
+	}
+	
+	public void xmlDownload(){
+		
 	}
 	
 	public void searchTerm(){
