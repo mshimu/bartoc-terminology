@@ -232,4 +232,8 @@ public class ShowBartocTerminology {
 //		col.getTerminology();
 //		col.fileDownload();
 //	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 256f76728492faa6e586cb407c17c49fab529953
