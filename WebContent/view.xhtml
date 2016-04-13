@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<head>	
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Bartoc Terminologies View</title>
+</head>
+<h:body>
+<h:form>
+   	      
+    <p:dataTable var="bartoc" value="#{showTerminology.getTerminology()}">
+     			
+        <f:facet name="header">
+            Expand the name to see detailed information
+        </f:facet>
+        	<p:column style="width:16px">
+            	<p:rowToggler />
+        	</p:column>
+        	<p:column headerText="Title: ">
+            	<h:outputText value="#{bartoc.prefLabel}" />
+        	</p:column>
+       	 	<p:rowExpansion>
+       	 			
+            	<p:panelGrid  columns="2" columnClasses="label,value" style="width:500px">
+ 
+                	<h:outputText value="Title:" />
+                	<h:outputText value="#{bartoc.prefLabel}" />
+
+                	<h:outputText value="Alternative Title" />
+                	<h:outputText value="#{bartoc.altLabel}" />
+ 
+                	<h:outputText value="Abstract:" />
+                	<h:outputText value="#{bartoc.scopeNote}" />
+ 
+                	<h:outputText value="Author" />
+                	<h:outputText value="#{bartoc.creator}" />
+                
+                	<h:outputText value="Type:" />
+                	<h:outputText value="#{bartoc.type}" />
+                
+                	<h:outputText value="Wikidata:" />
+                	<h:outputText value="#{bartoc.wikipedia}" />
+                
+                	<h:outputText value="Link:" />
+                	<h:outputText value="#{bartoc.url}" />
+                
+                	<h:outputText value="Topic:" />
+                	<h:outputText value="#{bartoc.subject}" />
+                
+                	<h:outputText value="DDC:" />
+                	<h:outputText value="#{bartoc.ddc_notation}" />
+                
+           		</p:panelGrid>
+          	</p:rowExpansion>
+
+    </p:dataTable>
+</h:form>
+</h:body>
+</html>
