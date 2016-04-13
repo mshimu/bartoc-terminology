@@ -91,15 +91,21 @@
          	<p:fileDownload value="#{showTerminology.fileDownload()}" />  
      	</p:commandLink>  
   
-     	<p:spacer width="20"/>  
+     	<p:spacer width="20"/>    
   
      	<p:commandLink id="xls" ajax="false" >  
          	<p:graphicImage value="/resources/images/excel.png"/>  
          	<f:setPropertyActionListener value="false" target="#{exporterController.customExporter}" />  
          	<pe:exporter type="xlsx" target="datatable" fileName="dataTable" facetBackground="#AAFFBB"  
                          datasetPadding="4"/>  
-  
      	</p:commandLink>  
+     	
+     	<p:spacer width="20"/>
+     	
+     	<p:commandLink id="json" ajax="false" >  
+         	<p:graphicImage value="/resources/images/xml.png"/> 
+         	<p:fileDownload value="#{showTerminology.xmlDownload()}" />  
+     	</p:commandLink>
 	</p:panel>
 
     	
