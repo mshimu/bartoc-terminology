@@ -8,108 +8,40 @@
 	
 	
 <h:head>
+   <link type="text/css" rel="stylesheet" href="#{request.contextPath}/themes/my-redmond/theme.css"/> 
+ <link type="text/css" rel="stylesheet" href="faces/javax.faces.resource/theme.css?ln=primefaces-my-redmond"/> 
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Terminologies</title>
 </h:head>
+
 <h:body>
 		
-<h:form id="classificationForm">
-	<p:panel header="Select a Terminology" style="margin-bottom:10px;">
-        <h:panelGrid columns="4" cellpadding="5">
-        	<h:outputText value="Search: " style="font-weight:bold;"/>
-                <p:inputText id="globalFilter" style="width:150px" placeholder="Enter keyword"/>
-			<p:outputLabel for="listName" value="" />
-			
-			<p:selectOneMenu id="listName" value="#{showTerminology.listName}" style="width:160px">
-				<f:selectItem itemLabel="Select One" itemValue="" />
-				<f:selectItem itemLabel="Subject Classifications" itemValue="Subject Classifications" />
-				<f:selectItem itemLabel="Subject Heading" itemValue="Subject Heading" />
-				<f:selectItem itemLabel="Thesauri" itemValue="Thesauri" />
-				<f:selectItem itemLabel="Universal Classifications" itemValue="Universal Classifications" />
-				<f:selectItem itemLabel="University Specific Classifications" itemValue="University Specific Classifications" />
-				
-				<p:ajax event="change" update=":classificationData:datatable" />
-			</p:selectOneMenu>
-		</h:panelGrid>
-	</p:panel>
-</h:form>
+<h:form id="manuForm">
+	<p:growl id="messages" showDetail="false"/>
 
-<h:form id="classificationData">
-   	      
-    	<p:dataTable id="datatable" var="bartoc" value="#{showTerminology.getTerminology()}" 
-                 emptyMessage="No terminologies found with given criteria" >
-        			
-        	<f:facet name="header">
- <!-- 	     		<h:outputText value="Search fields: " />
-                <p:inputText id="globalFilter" onkeyup="dtable.filter()" style="width:150px" placeholder="Enter keyword"/>
-            	<p:separator />		-->
-            	Expand for Metadata
-        	</f:facet>
-        	
-        	<p:column style="width:16px">
-        	    <p:rowToggler />
-        	</p:column>
-       	
-        	<p:column headerText="" >
-            <h:outputText value="#{bartoc.prefLabel}" style="color:#000099;font-weight:bold;" />
-        	</p:column>
-        	
-<!--        	<p:column headerText="Title: ">
-            	<h:outputText value="#{bartoc.prefLabel}" />
-        	</p:column>  -->
+	<p:menubar style="width: 500px; margin-left:auto; margin-right:auto;">
+       
+		<p:menuitem value="About">
+		</p:menuitem>
+        <p:menuitem value="Terminologies">
+        </p:menuitem>
+        <p:menuitem value="Concordances">
+        </p:menuitem>
+        <p:menuitem value="Cocoda Prototype">
+        </p:menuitem>
+        <p:menuitem value="Contacts" />
+		
+    </p:menubar>
+    
+</h:form>   
 
-       	 	<p:rowExpansion>
-            	<p:panelGrid  columns="1" columnClasses="label,value" style="width:100%">
- 						
-                	<h:outputText value="&lt;b&gt;Title:  &lt;/b&gt;#{bartoc.prefLabel}" escape="false" />
- 
-            		<h:outputText value="&lt;b&gt;Alternative Title: &lt;/b&gt;#{bartoc.altLabel}" escape="false"/>
-
-             		<h:outputText value="&lt;b&gt;Abstract: &lt;/b&gt;#{bartoc.scopeNote}" escape="false"/>
-             	
-                	<h:outputText value="&lt;b&gt;Author: &lt;/b&gt;#{bartoc.creator}" escape="false"/>
-                	
-                	<h:outputText value="&lt;b&gt;Type: &lt;/b&gt;#{bartoc.type}" escape="false"/>
-                	
-                	<h:outputText value="&lt;b&gt;Additional information: &lt;/b&gt;#{bartoc.wikipedia}" escape="false"/>
-                	
-                	<h:outputText value="&lt;b&gt;Link: &lt;/b&gt;#{bartoc.url}" escape="false"/>
-                	
-                	<h:outputText value="&lt;b&gt;Topic: &lt;/b&gt;#{bartoc.subject}" escape="false"/>
-            
-                	<h:outputText value="&lt;b&gt;DDC: &lt;/b&gt;#{bartoc.ddc_notation}" escape="false"/>
-            			
-            	</p:panelGrid>
-        	</p:rowExpansion>
-    	</p:dataTable>
-    	
-    	<p:separator />
-    	
-     <p:panel header="Export JSON and Excel">  
-     	<p:commandLink id="json" ajax="false" >  
-         	<p:graphicImage value="/resources/images/json.png"/> 
-         	<p:fileDownload value="#{showTerminology.fileDownload()}" />  
-     	</p:commandLink>  
-  
-     	<p:spacer width="20"/>  
-  
-     	<p:commandLink id="xls" ajax="false" >  
-         	<p:graphicImage value="/resources/images/excel.png"/>  
-         	<f:setPropertyActionListener value="false" target="#{exporterController.customExporter}" />  
-         	<pe:exporter type="xlsx" target="datatable" fileName="dataTable" facetBackground="#AAFFBB"  
-                         datasetPadding="4"/>  
-     	</p:commandLink>  
-     	
-     	<p:spacer width="20"/>
-     	
-     	<p:commandLink id="xml" ajax="false" >  
-         	<p:graphicImage value="/resources/images/xml.png"/> 
-         	<p:fileDownload value="#{showTerminology.xmlDownload()}" />  
-     	</p:commandLink>
-     	
-	</p:panel>
-   	
-</h:form>
+<div id="footer">
+  <ui:insert name="footer">
+    	Footer area.  See comments below this line in the source.
+    	<!--  include your header file or uncomment the include below and create footer.xhtml in this directory -->
+		<!--<ui:include src="footer.xhtml"/>  -->
+  </ui:insert>
+</div>
 
 </h:body>
 
